@@ -114,15 +114,13 @@ def process_tasks(task):
     elif "CUSTOM" in function_type[1]:
         command_parts = function_type[1].split()
         
-        if command_parts[0].upper() == 'TRACEROUTE':
+        if command_parts[0].upper() == 'CUSTOM':
             command_parts = command_parts[1:]
         else:
-            raise Exception("Error in the format using TRACEROUTE")
+            raise Exception("Error in the format using CUSTOM")
         
         arguments = ' '.join(command_parts)
-        start_process("traceroute_function", custom_function, arguments)
-
-    
+        start_process("custom_function", custom_function, arguments)
 
     else:
         print("This command does not exist")
