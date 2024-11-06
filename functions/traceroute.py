@@ -31,7 +31,6 @@ def read_traceRoute_output():
             else:
                 break
     finally:
-
         client.disconnect()
 
 def traceRoute_function(arguments):
