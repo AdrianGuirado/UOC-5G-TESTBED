@@ -22,14 +22,11 @@ def start_process(function_key, target_function, *args):
         task_processes[function_key] = process
 
 def stop_process(function_key):
-        print(function_key)
-        print(task_processes)
         if function_key in task_processes:
-            print("entra")
             task_processes[function_key].terminate()
             task_processes[function_key].join()
             del task_processes[function_key]
-
+        
 def process_tasks(task):
     global task_processes
 
@@ -43,8 +40,11 @@ def process_tasks(task):
     if len(function_type) <= 1:
         print("Error in the command")
         return
+    
+    if "TRACEROUTE_STOP" in function_type[1]:
+        stop_process("traceroute_function")
 
-    if "TRACEROUTE" in function_type[1]:
+    elif "TRACEROUTE" in function_type[1]:
         command_parts = function_type[1].split()
         
         if command_parts[0].upper() == 'TRACEROUTE':
@@ -55,14 +55,15 @@ def process_tasks(task):
         arguments = ' '.join(command_parts)
         start_process("traceroute_function", traceRoute_function, arguments)
 
-    elif "TRACEROUTE_STOP" in function_type[1]:
-        stop_process("traceroute_function")
+    
+    elif "SPEEDTEST_STOP" in function_type[1] :
+        stop_process("speedtest_function")
 
     elif "SPEEDTEST" in function_type[1]:
         start_process("speedtest_function", speedTest_function)
 
-    elif "SPEEDTEST_STOP" in function_type[1] :
-        stop_process("speedtest_function")
+    elif "PING_STOP" in function_type[1]:
+        stop_process("ping_function")
 
     elif "PING" in function_type[1]:
         command_parts = function_type[1].split()
@@ -74,9 +75,9 @@ def process_tasks(task):
         arguments = ' '.join(command_parts)
         start_process("ping_function", ping_function, arguments)
 
-    elif "PING_STOP" in function_type[1]:
-        print("entra en ping_stop")
-        stop_process("ping_function")
+    
+    elif "HPING_STOP" in function_type[1]:
+        stop_process("hping_function")
     
     elif "HPING" in function_type[1]:
         command_parts = function_type[1].split()
@@ -87,9 +88,6 @@ def process_tasks(task):
         
         arguments = ' '.join(command_parts)
         start_process("ping_function", hping_function, arguments)
-
-    elif "HPING_STOP" in function_type[1]:
-        stop_process("hping_function")
 
     elif "SAVE_FILE" in function_type[1]:
         command_parts = function_type[1].split()

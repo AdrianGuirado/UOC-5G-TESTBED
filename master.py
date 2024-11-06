@@ -11,6 +11,7 @@ with open(file_path, "r") as file:
     for line in file:
         command = line.strip()
         if command:
+            time.sleep(0.1)
             client.publish(commands_topic, command)
             print(f"Message transmitted: {command}")
 
