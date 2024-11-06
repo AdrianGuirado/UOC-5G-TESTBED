@@ -25,7 +25,6 @@ def stop_process(function_key):
         print(function_key)
         print(task_processes)
         if function_key in task_processes:
-
             print("entra")
             task_processes[function_key].terminate()
             task_processes[function_key].join()
@@ -76,6 +75,7 @@ def process_tasks(task):
         start_process("ping_function", ping_function, arguments)
 
     elif "PING_STOP" in function_type[1]:
+        print("entra en ping_stop")
         stop_process("ping_function")
     
     elif "HPING" in function_type[1]:
