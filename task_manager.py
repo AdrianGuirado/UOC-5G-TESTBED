@@ -35,8 +35,6 @@ def process_tasks(task):
     
     function_type = task.split(":")
 
-    print(function_type[1])
-
     if len(function_type) <= 1:
         print("Error in the command")
         return
