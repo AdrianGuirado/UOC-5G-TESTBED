@@ -1,1 +1,5 @@
-USER1:PING:www.google.es
+USER1:PING www.google.es
+USER1:PING www.amazon.es
+USER1:PING www.facebook.es
+DELAY(10)
+USER1:TRACEROUTE www.google.es

@@ -4,19 +4,24 @@ import multiprocessing
 
 from functions.traceroute import traceRoute_function
 from functions.ping import ping_function
+from functions.custom import custom_function
+from functions.hping import hping_function
 from functions.testspeed import speedTest_function
+from functions.parameters import *
+ 
+import time
+
+import paho.mqtt.client as mqtt
 
 task_processes = {}
 user = "USER1"
 
 def start_process(function_key, target_function, *args):
-    if function_key not in task_processes:
         process = multiprocessing.Process(target=target_function, args=args)
         process.start()
         task_processes[function_key] = process
 
 def stop_process(function_key):
-    if function_key in task_processes:
         task_processes[function_key].terminate()
         task_processes[function_key].join()
         del task_processes[function_key]
@@ -25,6 +30,7 @@ def process_tasks(task):
     global task_processes
 
     print("Este es el mensaje")
+    print(task)
 
     if user not in task and "ALL" not in task:
         return
@@ -37,31 +43,86 @@ def process_tasks(task):
         print("Error in the command")
         return
 
-    if function_type[1] == "TRACEROUTE":
-        start_process("traceroute_function", traceRoute_function)
+    if "TRACEROUTE" in function_type[1]:
+        command_parts = function_type[1].split()
+        
+        if command_parts[0].upper() == 'TRACEROUTE':
+            command_parts = command_parts[1:]
+        else:
+            raise Exception("Error in the format using TRACEROUTE")
+        
+        arguments = ' '.join(command_parts)
+        start_process("traceroute_function", traceRoute_function, arguments)
 
-    elif function_type[1] == "TRACEROUTE_STOP":
+    elif "TRACEROUTE_STOP" in function_type[1]:
         stop_process("traceroute_function")
 
-    elif function_type[1] == "SPEEDTEST":
+    elif "SPEEDTEST" in function_type[1]:
         start_process("speedtest_function", speedTest_function)
 
-    elif function_type[1] == "SPEEDTEST_STOP":
+    elif "SPEEDTEST_STOP" in function_type[1] :
         stop_process("speedtest_function")
 
-    elif function_type[1] == "PING":
-        ip = function_type[2]
-        #count = function_type[3]
-        #interval = function_type[4]
-        #timeout = function_type[5]
-        #size = function_type[6]
-        #ttl = function_type[7]
+    elif "PING" in function_type[1]:
+        command_parts = function_type[1].split()
+        if command_parts[0].upper() == 'PING':
+            command_parts = command_parts[1:]
+        else:
+            raise Exception("Error in the format using PING")
+        
+        arguments = ' '.join(command_parts)
+        start_process("ping_function", ping_function, arguments)
 
-        #start_process("ping_function", ping_function, ip, count, interval, timeout, size, ttl)
-
-        start_process("ping_function", ping_function, ip)
-    elif function_type[1] == "PING_STOP":
+    elif "PING_STOP" in function_type[1]:
         stop_process("ping_function")
+    
+    elif "HPING" in function_type[1]:
+        command_parts = function_type[1].split()
+        if command_parts[0].upper() == 'HPING':
+            command_parts = command_parts[1:]
+        else:
+            raise Exception("Error in the format using HPING")
+        
+        arguments = ' '.join(command_parts)
+        start_process("ping_function", hping_function, arguments)
+
+    elif "HPING_STOP" in function_type[1]:
+        stop_process("hping_function")
+
+    elif "SAVE_FILE" in function_type[1]:
+        command_parts = function_type[1].split()
+
+        if command_parts[0].upper() == 'SAVE_FILE':
+            command_parts = command_parts[1:]
+        else:
+            raise Exception("Error in the format using SAVE_FILE")
+
+        rest_of_command = ' '.join(command_parts)
+
+        client = mqtt.Client()
+        client.connect(server_ip, 1883)
+        client.subscribe(response_topic)
+
+        client.publish(response_topic, f"SAVE_FILE {rest_of_command}")
+
+    elif "DELAY" in function_type[1]:
+        command_parts = function_type[1].split(" ")
+        delay = int(command_parts[1])
+
+        time.sleep(delay)
+    elif "CUSTOM" in function_type[1]:
+        command_parts = function_type[1].split()
+        
+        if command_parts[0].upper() == 'TRACEROUTE':
+            command_parts = command_parts[1:]
+        else:
+            raise Exception("Error in the format using TRACEROUTE")
+        
+        arguments = ' '.join(command_parts)
+        start_process("traceroute_function", custom_function, arguments)
+    elif "CUSTOM_STOP" in function_type[1]:
+        stop_process("ping_function")
+    
 
     else:
         print("This command does not exist")

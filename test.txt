@@ -1,0 +1,14 @@
+TRACEROUTE
+TRACEROUTETraza a la direcci�n www.google.es [142.250.201.67]
+TRACEROUTEsobre un m�ximo de 30 saltos:
+TRACEROUTE
+TRACEROUTE  1    <1 ms    <1 ms    <1 ms  liveboxfibra.home [192.168.1.1]
+TRACEROUTE  2     *        *        *     Tiempo de espera agotado para esta solicitud.
+TRACEROUTE  3     3 ms     4 ms     2 ms  10.34.200.50
+TRACEROUTE  4     3 ms     2 ms     2 ms  193.251.251.228
+TRACEROUTE  5     2 ms     3 ms     2 ms  193.251.251.229
+TRACEROUTE  6    19 ms    18 ms    18 ms  193.251.133.250
+TRACEROUTE  7    18 ms    18 ms    17 ms  72.14.204.184
+TRACEROUTE  8    18 ms    18 ms    18 ms  108.170.255.153
+TRACEROUTE  9    17 ms    17 ms    18 ms  108.170.255.168
+SAVE_FILE test.txt
