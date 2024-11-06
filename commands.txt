@@ -1,3 +1,4 @@
 USER1:PING www.google.es
 USER1:DELAY 5
 USER1:PING_STOP
+USER1:SAVE_FILE test.txt

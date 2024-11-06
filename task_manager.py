@@ -52,7 +52,6 @@ def process_tasks(task):
         
         arguments = ' '.join(command_parts)
         start_process("traceroute_function", traceRoute_function, arguments)
-
     
     elif "SPEEDTEST_STOP" in function_type[1] :
         stop_process("speedtest_function")
@@ -108,6 +107,10 @@ def process_tasks(task):
         delay = int(command_parts[1])
 
         time.sleep(delay)
+
+    elif "CUSTOM_STOP" in function_type[1]:
+        stop_process("ping_function") 
+   
     elif "CUSTOM" in function_type[1]:
         command_parts = function_type[1].split()
         
@@ -118,8 +121,7 @@ def process_tasks(task):
         
         arguments = ' '.join(command_parts)
         start_process("traceroute_function", custom_function, arguments)
-    elif "CUSTOM_STOP" in function_type[1]:
-        stop_process("ping_function")
+
     
 
     else:
