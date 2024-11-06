@@ -27,7 +27,7 @@ def read_traceRoute_output():
         while traceroute_process and traceroute_process.poll() is None:
             line = traceroute_process.stdout.readline()
             if line:
-                client.publish(response_topic, f"PING {line.strip()}")
+                client.publish(response_topic, f"TRACEROUTE {line.strip()}")
             else:
                 break
     finally:
