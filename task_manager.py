@@ -22,7 +22,10 @@ def start_process(function_key, target_function, *args):
         task_processes[function_key] = process
 
 def stop_process(function_key):
+        print(function_key)
+        print(task_processes)
         if function_key in task_processes:
+
             print("entra")
             task_processes[function_key].terminate()
             task_processes[function_key].join()
