@@ -22,15 +22,14 @@ def start_process(function_key, target_function, *args):
         task_processes[function_key] = process
 
 def stop_process(function_key):
-        task_processes[function_key].terminate()
-        task_processes[function_key].join()
-        del task_processes[function_key]
+        if function_key in task_processes:
+            print("entra")
+            task_processes[function_key].terminate()
+            task_processes[function_key].join()
+            del task_processes[function_key]
 
 def process_tasks(task):
     global task_processes
-
-    print("Este es el mensaje")
-    print(task)
 
     if user not in task and "ALL" not in task:
         return
