@@ -12,7 +12,7 @@ traceroute_process = None
 def run_traceRoute(arguments):
     global traceroute_process
 
-    command = ["traceroute"]
+    command = ["tracert"]
     command.append(arguments)
 
     traceroute_process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True)
@@ -24,12 +24,17 @@ def read_traceRoute_output():
     client.subscribe(response_topic)
 
     try:
-        while traceroute_process and traceroute_process.poll() is None:
-            line = traceroute_process.stdout.readline()
-            if line:
-                client.publish(response_topic, f"TRACEROUTE {line.strip()}")
-            else:
-                break
+        with open("test_traceroute.txt", "w") as file:
+            while traceroute_process and traceroute_process.poll() is None:
+                line = traceroute_process.stdout.readline()
+                if line:
+                    client.publish(response_topic, f"TRACEROUTE {line.strip()}")
+                    file.write(line)
+                else:
+                    break
+            file.write("\n--- TRACEROUTE COMPLETED ---\n")
+            client.publish(response_topic, f"TRACEROUTE FINISH")
+        
     finally:
         client.disconnect()
 

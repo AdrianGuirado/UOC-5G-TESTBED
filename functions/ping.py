@@ -18,7 +18,7 @@ def run_ping(arguments):
     print(command)   
     ping_process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True)
 
-def read_ping_output():
+def read_ping_output(header):
     client = mqtt.Client()
     client.connect(server_ip, 1883)
     client.subscribe(response_topic)
@@ -28,17 +28,21 @@ def read_ping_output():
         while ping_process and ping_process.poll() is None:
             line = ping_process.stdout.readline()
             if line:
-                client.publish(response_topic, f"PING {line.strip()}")
+                client.publish(response_topic, f"{header} {line.strip()}")
             else:
                 break
     finally:
         client.disconnect()
 
 def ping_function(arguments):
+    print(f"printeo arguments {arguments}")
+
+    header, arguments = arguments.split(" ")
+
     thread_ping = threading.Thread(target=run_ping, args=(arguments,))
     thread_ping.start()
 
     time.sleep(0.1)
 
-    thread_read = threading.Thread(target=read_ping_output)
+    thread_read = threading.Thread(target=read_ping_output, args=(header,))
     thread_read.start()

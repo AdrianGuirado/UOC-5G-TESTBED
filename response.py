@@ -2,27 +2,33 @@ import paho.mqtt.client as mqtt
 from functions.parameters import *
 from datetime import datetime
 
-current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-output_file = f"messages_received_{current_time}.txt"
-
-all_messages = []
+messages_by_header = {}
 
 def on_message(client, userdata, message):
-    message = message.payload.decode()
-    print(f"Message received: {message}")
-    
-    all_messages.append(message)
-    
-    if message.startswith("SAVE_FILE "):
-        filename = message.split(" ", 1)[1].strip()
+    message_content = message.payload.decode()
+    print(f"Message received: {message_content}")
+
+    if "_" in message_content:
+        header, content = message_content.split("_", 1)
+    else:
+        header, content = message_content.split(" ", 1)
         
-        with open(filename, "w") as file:
-            for msg in all_messages:
-                file.write(f"{msg}\n")
-            print(f"Saved all messages to {filename}")
+    if header not in messages_by_header:
+        messages_by_header[header] = []
+    messages_by_header[header].append(content)
     
-    with open(output_file, "a") as file:
-        file.write(f"{message}\n")
+    if message_content.startswith("STOP_"):
+        stop_header = message_content.split("_", 1)[1].strip()
+        
+        if stop_header in messages_by_header:
+            filename = f"{stop_header}.txt"
+            
+            with open(filename, "w") as file:
+                for msg in messages_by_header[stop_header]:
+                    file.write(f"{msg}\n")
+            print(f"Saved all messages for {stop_header} to {filename}")
+            
+            del messages_by_header[stop_header]
 
 client = mqtt.Client()
 client.on_message = on_message

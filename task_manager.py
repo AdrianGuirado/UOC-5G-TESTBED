@@ -39,7 +39,7 @@ def process_tasks(task):
         print("Error in the command")
         return
     
-    if "TRACEROUTE_STOP" in function_type[1]:
+    if "STOP_TRACEROUTE" in function_type[1]:
         stop_process("traceroute_function")
 
     elif "TRACEROUTE" in function_type[1]:
@@ -59,21 +59,37 @@ def process_tasks(task):
     elif "SPEEDTEST" in function_type[1]:
         start_process("speedtest_function", speedTest_function)
 
-    elif "PING_STOP" in function_type[1]:
-        stop_process("ping_function")
+    elif "STOP_PING" in function_type[1]:
+        print(function_type)
+        print(f"esto es function type {function_type}")
+        header = function_type[1].split(" ")[1]
+
+        client_stop = mqtt.Client()
+        client_stop.connect(server_ip, 1883)
+        client_stop.subscribe(response_topic)
+
+        client_stop.publish(response_topic, "STOP_" + str(header))
+
+        client_stop.disconnect()
+
+        header = function_type[1].split(" ")[1]
+
+        stop_process("ping_function" + str(header))
 
     elif "PING" in function_type[1]:
         command_parts = function_type[1].split()
-        if command_parts[0].upper() == 'PING':
-            command_parts = command_parts[1:]
+        
+        if command_parts[1].upper() == 'PING':
+            header = function_type[1].split(" ")[0]
+            additional_arguments = command_parts[2:]
+            all_arguments = [header] + additional_arguments
+            arguments_str = ' '.join(all_arguments)
+            start_process("ping_function" + str(header), ping_function, arguments_str)
         else:
             raise Exception("Error in the format using PING")
-        
-        arguments = ' '.join(command_parts)
-        start_process("ping_function", ping_function, arguments)
 
     
-    elif "HPING_STOP" in function_type[1]:
+    elif "STOP_HPING" in function_type[1]:
         stop_process("hping_function")
     
     elif "HPING" in function_type[1]:
@@ -108,7 +124,7 @@ def process_tasks(task):
 
         time.sleep(delay)
 
-    elif "CUSTOM_STOP" in function_type[1]:
+    elif "STOP_CUSTOM" in function_type[1]:
         stop_process("ping_function") 
    
     elif "CUSTOM" in function_type[1]:
