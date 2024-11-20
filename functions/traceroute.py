@@ -17,14 +17,14 @@ def run_traceRoute(arguments):
 
     traceroute_process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True)
 
-def read_traceRoute_output():
+def read_traceRoute_output(header):
 
     client = mqtt.Client()
     client.connect(server_ip, 1883)
     client.subscribe(response_topic)
 
     try:
-        with open("test_traceroute.txt", "w") as file:
+        with open(f"{header}.txt", "w") as file:
             while traceroute_process and traceroute_process.poll() is None:
                 line = traceroute_process.stdout.readline()
                 if line:
@@ -39,13 +39,15 @@ def read_traceRoute_output():
         client.disconnect()
 
 def traceRoute_function(arguments):
-    
+
+    header, arguments = arguments.split(" ")
+
     thread_traceRoute = threading.Thread(target=run_traceRoute, args=(arguments,))
     thread_traceRoute.start()
 
     time.sleep(0.1)
 
-    thread_read = threading.Thread(target=read_traceRoute_output)
+    thread_read = threading.Thread(target=read_traceRoute_output, args=(header,))
     thread_read.start()
 
     

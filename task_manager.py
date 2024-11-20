@@ -26,7 +26,24 @@ def stop_process(function_key):
             task_processes[function_key].terminate()
             task_processes[function_key].join()
             del task_processes[function_key]
-        
+
+def process_comand(function, command):
+    
+    if str(command[1].upper()) == function:
+        header = command[0]
+        command_parts = command[2:]
+    else:
+        raise Exception(f"Error in the format using {function}")
+    
+    return header, command_parts
+
+def build_arguments(function, expected_function_type):
+
+    header, command_parts = process_comand(function, expected_function_type[1].split())
+    
+    all_arguments = [header] + command_parts
+    return ' '.join(all_arguments)
+
 def process_tasks(task):
     global task_processes
 
@@ -43,64 +60,33 @@ def process_tasks(task):
         stop_process("traceroute_function")
 
     elif "TRACEROUTE" in function_type[1]:
-        command_parts = function_type[1].split()
-        
-        if command_parts[0].upper() == 'TRACEROUTE':
-            command_parts = command_parts[1:]
-        else:
-            raise Exception("Error in the format using TRACEROUTE")
-        
-        arguments = ' '.join(command_parts)
-        start_process("traceroute_function", traceRoute_function, arguments)
+
+        arguments = build_arguments('TRACEROUTE', function_type[1])
+        start_process("traceroute_function"+ str(header), traceRoute_function, arguments)
     
     elif "SPEEDTEST_STOP" in function_type[1] :
         stop_process("speedtest_function")
 
     elif "SPEEDTEST" in function_type[1]:
-        start_process("speedtest_function", speedTest_function)
+
+        arguments = build_arguments('SPEEDTEST', function_type[1])
+        start_process("speedtest_function"+ str(header), speedTest_function, arguments)
 
     elif "STOP_PING" in function_type[1]:
-        print(function_type)
-        print(f"esto es function type {function_type}")
         header = function_type[1].split(" ")[1]
-
-        client_stop = mqtt.Client()
-        client_stop.connect(server_ip, 1883)
-        client_stop.subscribe(response_topic)
-
-        client_stop.publish(response_topic, "STOP_" + str(header))
-
-        client_stop.disconnect()
-
-        header = function_type[1].split(" ")[1]
-
         stop_process("ping_function" + str(header))
 
     elif "PING" in function_type[1]:
-        command_parts = function_type[1].split()
-        
-        if command_parts[1].upper() == 'PING':
-            header = function_type[1].split(" ")[0]
-            additional_arguments = command_parts[2:]
-            all_arguments = [header] + additional_arguments
-            arguments_str = ' '.join(all_arguments)
-            start_process("ping_function" + str(header), ping_function, arguments_str)
-        else:
-            raise Exception("Error in the format using PING")
 
-    
+        arguments = build_arguments('PING', function_type[1])
+        start_process("ping_function"+ str(header), ping_function, arguments)
+        
     elif "STOP_HPING" in function_type[1]:
         stop_process("hping_function")
     
     elif "HPING" in function_type[1]:
-        command_parts = function_type[1].split()
-        if command_parts[0].upper() == 'HPING':
-            command_parts = command_parts[1:]
-        else:
-            raise Exception("Error in the format using HPING")
-        
-        arguments = ' '.join(command_parts)
-        start_process("ping_function", hping_function, arguments)
+        arguments = build_arguments('HPING', function_type[1])
+        start_process("hping_function"+ str(header), hping_function, arguments)
 
     elif "SAVE_FILE" in function_type[1]:
         command_parts = function_type[1].split()
@@ -119,24 +105,17 @@ def process_tasks(task):
         client.publish(response_topic, f"SAVE_FILE {rest_of_command}")
 
     elif "DELAY" in function_type[1]:
+
         command_parts = function_type[1].split(" ")
         delay = int(command_parts[1])
-
         time.sleep(delay)
 
     elif "STOP_CUSTOM" in function_type[1]:
         stop_process("ping_function") 
    
     elif "CUSTOM" in function_type[1]:
-        command_parts = function_type[1].split()
-        
-        if command_parts[0].upper() == 'CUSTOM':
-            command_parts = command_parts[1:]
-        else:
-            raise Exception("Error in the format using CUSTOM")
-        
-        arguments = ' '.join(command_parts)
-        start_process("custom_function", custom_function, arguments)
+        arguments = build_arguments('CUSTOM', function_type[1])
+        start_process("custom_function"+ str(header), custom_function, arguments)
 
     else:
         print("This command does not exist")
