@@ -1,6 +1,6 @@
 import urllib.request
 
-def download_file_from_ip(ip, port, file_path, save_path):
+def download_file_from_user(ip, port, file_path, save_path):
 
     url = f"http://{ip}:{port}/{file_path}"
     try:
@@ -15,4 +15,4 @@ port = 8080
 remote_file_path = "test_download.txt"
 local_save_path = "txtdownloaded.txt"  
 
-download_file_from_ip(ip_address, port, remote_file_path, local_save_path)
+download_file_from_user(ip_address, port, remote_file_path, local_save_path)

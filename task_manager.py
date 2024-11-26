@@ -49,7 +49,7 @@ def process_tasks(task):
 
     if user not in task and "ALL" not in task:
         return
-    
+                             
     function_type = task.split(":")
 
     if len(function_type) <= 1:
@@ -60,7 +60,6 @@ def process_tasks(task):
         stop_process("traceroute_function")
 
     elif "TRACEROUTE" in function_type[1]:
-
         arguments = build_arguments('TRACEROUTE', function_type[1])
         start_process("traceroute_function"+ str(header), traceRoute_function, arguments)
     
@@ -68,7 +67,6 @@ def process_tasks(task):
         stop_process("speedtest_function")
 
     elif "SPEEDTEST" in function_type[1]:
-
         arguments = build_arguments('SPEEDTEST', function_type[1])
         start_process("speedtest_function"+ str(header), speedTest_function, arguments)
 
@@ -77,7 +75,6 @@ def process_tasks(task):
         stop_process("ping_function" + str(header))
 
     elif "PING" in function_type[1]:
-
         arguments = build_arguments('PING', function_type[1])
         start_process("ping_function"+ str(header), ping_function, arguments)
         
@@ -87,6 +84,10 @@ def process_tasks(task):
     elif "HPING" in function_type[1]:
         arguments = build_arguments('HPING', function_type[1])
         start_process("hping_function"+ str(header), hping_function, arguments)
+    
+    elif "CONNECT_SLICE" in function_type[1]:
+        arguments = build_arguments('CONNECT_SLICE', function_type[1])
+        start_process("connectslice_function"+ str(header), hping_function, arguments)
 
     elif "SAVE_FILE" in function_type[1]:
         command_parts = function_type[1].split()
