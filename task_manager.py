@@ -65,13 +65,13 @@ def process_tasks(task):
         arguments = build_arguments('CONNECT_SLICE', function_type[1])
         start_process("connectslice_function"+ str(header), connectSlice_function, arguments)
 
-    if "AUTHENTICATE" in function_type[1]:
+    elif "STOP_AUTHENTICATE" in function_type[1]:
+        stop_process("authenticate_function")    
+
+    elif "AUTHENTICATE" in function_type[1]:
         arguments = build_arguments('AUTHENTICATE', function_type[1])
         start_process("authenticate_function"+ str(header), authenticate_function, arguments)
         
-    elif "STOP_AUTHENTICATE" in function_type[1]:
-        stop_process("authenticate_function")
-
     elif "STOP_TRACEROUTE" in function_type[1]:
         stop_process("traceroute_function")
 
@@ -100,10 +100,6 @@ def process_tasks(task):
     elif "HPING" in function_type[1]:
         arguments = build_arguments('HPING', function_type[1])
         start_process("hping_function"+ str(header), hping_function, arguments)
-    
-    elif "CONNECT_SLICE" in function_type[1]:
-        arguments = build_arguments('CONNECT_SLICE', function_type[1])
-        start_process("connectslice_function"+ str(header), hping_function, arguments)
 
     elif "SAVE_FILE" in function_type[1]:
         command_parts = function_type[1].split()
