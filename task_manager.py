@@ -7,7 +7,9 @@ from functions.ping import ping_function
 from functions.custom import custom_function
 from functions.hping import hping_function
 from functions.testspeed import speedTest_function
+from functions.connect_slice import connectSlice_function
 from functions.parameters import *
+from functions.authenticate import authenticate_function
  
 import time
 
@@ -56,14 +58,28 @@ def process_tasks(task):
         print("Error in the command")
         return
     
-    if "STOP_TRACEROUTE" in function_type[1]:
+    if "STOP_CONNECT_SLICE" in function_type[1]:
+        stop_process("connectslice_function")
+
+    elif "CONNECT_SLICE" in function_type[1]:
+        arguments = build_arguments('CONNECT_SLICE', function_type[1])
+        start_process("connectslice_function"+ str(header), connectSlice_function, arguments)
+
+    if "AUTHENTICATE" in function_type[1]:
+        arguments = build_arguments('AUTHENTICATE', function_type[1])
+        start_process("authenticate_function"+ str(header), authenticate_function, arguments)
+        
+    elif "STOP_AUTHENTICATE" in function_type[1]:
+        stop_process("authenticate_function")
+
+    elif "STOP_TRACEROUTE" in function_type[1]:
         stop_process("traceroute_function")
 
     elif "TRACEROUTE" in function_type[1]:
         arguments = build_arguments('TRACEROUTE', function_type[1])
         start_process("traceroute_function"+ str(header), traceRoute_function, arguments)
     
-    elif "SPEEDTEST_STOP" in function_type[1] :
+    elif "STOP_SPEEDTEST" in function_type[1] :
         stop_process("speedtest_function")
 
     elif "SPEEDTEST" in function_type[1]:
