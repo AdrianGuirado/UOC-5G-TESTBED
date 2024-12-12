@@ -37,7 +37,6 @@ def read_ping_output(header):
             client.disconnect()
 
 def ping_function(arguments):
-    print(f"printeo arguments {arguments}")
 
     header, arguments = arguments.split(" ")
 

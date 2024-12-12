@@ -30,6 +30,7 @@ def stop_process(function_key):
             del task_processes[function_key]
 
 def process_comand(function, command):
+    command = command.split(" ")
     
     if str(command[1].upper()) == function:
         header = command[0]
@@ -41,8 +42,8 @@ def process_comand(function, command):
 
 def build_arguments(function, expected_function_type):
 
-    header, command_parts = process_comand(function, expected_function_type[1].split())
-    
+    header, command_parts = process_comand(function, expected_function_type)
+
     all_arguments = [header] + command_parts
     return ' '.join(all_arguments)
 
@@ -63,6 +64,7 @@ def process_tasks(task):
 
     elif "CONNECT_SLICE" in function_type[1]:
         arguments = build_arguments('CONNECT_SLICE', function_type[1])
+        header = arguments.split(" ")[0]
         start_process("connectslice_function"+ str(header), connectSlice_function, arguments)
 
     elif "STOP_AUTHENTICATE" in function_type[1]:
@@ -70,6 +72,7 @@ def process_tasks(task):
 
     elif "AUTHENTICATE" in function_type[1]:
         arguments = build_arguments('AUTHENTICATE', function_type[1])
+        header = arguments.split(" ")[0]
         start_process("authenticate_function"+ str(header), authenticate_function, arguments)
         
     elif "STOP_TRACEROUTE" in function_type[1]:
@@ -77,6 +80,7 @@ def process_tasks(task):
 
     elif "TRACEROUTE" in function_type[1]:
         arguments = build_arguments('TRACEROUTE', function_type[1])
+        header = arguments.split(" ")[0]
         start_process("traceroute_function"+ str(header), traceRoute_function, arguments)
     
     elif "STOP_SPEEDTEST" in function_type[1] :
@@ -84,6 +88,7 @@ def process_tasks(task):
 
     elif "SPEEDTEST" in function_type[1]:
         arguments = build_arguments('SPEEDTEST', function_type[1])
+        header = arguments.split(" ")[0]
         start_process("speedtest_function"+ str(header), speedtest_function, arguments)
 
     elif "STOP_PING" in function_type[1]:
@@ -92,13 +97,16 @@ def process_tasks(task):
 
     elif "PING" in function_type[1]:
         arguments = build_arguments('PING', function_type[1])
+        header = arguments.split(" ")[0]
         start_process("ping_function"+ str(header), ping_function, arguments)
         
     elif "STOP_HPING" in function_type[1]:
-        stop_process("hping_function")
+        header = function_type[1].split(" ")[1]
+        stop_process("hping_function" + str(header))
     
     elif "HPING" in function_type[1]:
         arguments = build_arguments('HPING', function_type[1])
+        header = arguments.split(" ")[0]
         start_process("hping_function"+ str(header), hping_function, arguments)
 
     elif "SAVE_FILE" in function_type[1]:
@@ -127,6 +135,7 @@ def process_tasks(task):
    
     elif "CUSTOM" in function_type[1]:
         arguments = build_arguments('CUSTOM', function_type[1])
+        header, arguments = arguments.split(" ")
         start_process("custom_function"+ str(header), custom_function, arguments)
 
     else:

@@ -12,7 +12,7 @@ traceroute_process = None
 def run_traceRoute(arguments):
     global traceroute_process
 
-    command = ["traceroute"]
+    command = ["tracert"]
     command.append(arguments)
 
     traceroute_process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True)
