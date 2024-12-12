@@ -60,7 +60,8 @@ def process_tasks(task):
         return
     
     if "STOP_CONNECT_SLICE" in function_type[1]:
-        stop_process("connectslice_function")
+        header = function_type[1].split(" ")[1]
+        stop_process("connectslice_function" + str(header))
 
     elif "CONNECT_SLICE" in function_type[1]:
         arguments = build_arguments('CONNECT_SLICE', function_type[1])
@@ -68,7 +69,8 @@ def process_tasks(task):
         start_process("connectslice_function"+ str(header), connectSlice_function, arguments)
 
     elif "STOP_AUTHENTICATE" in function_type[1]:
-        stop_process("authenticate_function")    
+        header = function_type[1].split(" ")[1]
+        stop_process("authenticate_function"  + str(header))    
 
     elif "AUTHENTICATE" in function_type[1]:
         arguments = build_arguments('AUTHENTICATE', function_type[1])
@@ -76,15 +78,17 @@ def process_tasks(task):
         start_process("authenticate_function"+ str(header), authenticate_function, arguments)
         
     elif "STOP_TRACEROUTE" in function_type[1]:
-        stop_process("traceroute_function")
+        header = function_type[1].split(" ")[1]
+        stop_process("traceroute_function" + str(header))
 
     elif "TRACEROUTE" in function_type[1]:
         arguments = build_arguments('TRACEROUTE', function_type[1])
         header = arguments.split(" ")[0]
-        start_process("traceroute_function"+ str(header), traceRoute_function, arguments)
+        start_process("traceroute_function" + str(header), traceRoute_function, arguments)
     
     elif "STOP_SPEEDTEST" in function_type[1] :
-        stop_process("speedtest_function")
+        header = function_type[1].split(" ")[1]
+        stop_process("speedtest_function" + str(header))
 
     elif "SPEEDTEST" in function_type[1]:
         arguments = build_arguments('SPEEDTEST', function_type[1])
@@ -93,7 +97,6 @@ def process_tasks(task):
 
     elif "STOP_PING" in function_type[1]:
         header = function_type[1].split(" ")[1]
-        print(f"header de stop ping {header}")
         stop_process("ping_function" + str(header))
 
     elif "PING" in function_type[1]:
