@@ -135,7 +135,7 @@ def process_tasks(task):
    
     elif "CUSTOM" in function_type[1]:
         arguments = build_arguments('CUSTOM', function_type[1])
-        header, arguments = arguments.split(" ")
+        header = arguments.split(" ")[0]
         start_process("custom_function"+ str(header), custom_function, arguments)
 
     else:
