@@ -6,7 +6,7 @@ from functions.traceroute import traceRoute_function
 from functions.ping import ping_function
 from functions.custom import custom_function
 from functions.hping import hping_function
-from functions.testspeed import speedTest_function
+from functions.testspeed import speedtest_function
 from functions.connect_slice import connectSlice_function
 from functions.parameters import *
 from functions.authenticate import authenticate_function
@@ -84,7 +84,7 @@ def process_tasks(task):
 
     elif "SPEEDTEST" in function_type[1]:
         arguments = build_arguments('SPEEDTEST', function_type[1])
-        start_process("speedtest_function"+ str(header), speedTest_function, arguments)
+        start_process("speedtest_function"+ str(header), speedtest_function, arguments)
 
     elif "STOP_PING" in function_type[1]:
         header = function_type[1].split(" ")[1]
@@ -108,7 +108,6 @@ def process_tasks(task):
             command_parts = command_parts[1:]
         else:
             raise Exception("Error in the format using SAVE_FILE")
-
         rest_of_command = ' '.join(command_parts)
 
         client = mqtt.Client()
