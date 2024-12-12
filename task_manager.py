@@ -93,6 +93,7 @@ def process_tasks(task):
 
     elif "STOP_PING" in function_type[1]:
         header = function_type[1].split(" ")[1]
+        print(f"header de stop ping {header}")
         stop_process("ping_function" + str(header))
 
     elif "PING" in function_type[1]:
