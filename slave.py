@@ -1,4 +1,4 @@
-# main.py
+# slave.py
 
 import multiprocessing
 from mqtt_handler import configure_mqtt

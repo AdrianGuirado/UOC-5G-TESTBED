@@ -1,6 +1,7 @@
 # task_manager.py
 
 import multiprocessing
+import os
 
 from functions.traceroute import traceRoute_function
 from functions.ping import ping_function
@@ -16,7 +17,11 @@ import time
 import paho.mqtt.client as mqtt
 
 task_processes = {}
-user = "USER1"
+
+file_path = os.path.abspath(__file__)
+containing_folder = os.path.dirname(file_path)
+parent_folder = os.path.dirname(containing_folder)
+user = os.path.basename(parent_folder)
 
 def start_process(function_key, target_function, *args):
         process = multiprocessing.Process(target=target_function, args=args)
