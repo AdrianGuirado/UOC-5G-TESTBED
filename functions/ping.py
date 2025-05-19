@@ -30,7 +30,7 @@ def read_ping_output(header):
                 line = ping_process.stdout.readline()
                 if line:
                     file.write(line)
-                    print("Estoy guardando esto")
+                    print(f"Estoy guardando esto {line}")
                     client.publish(response_topic, f"{header} {line.strip()}")
                 else:
                     break
