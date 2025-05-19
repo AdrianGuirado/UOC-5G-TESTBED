@@ -134,7 +134,6 @@ def process_tasks(task):
         client.publish(response_topic, f"SAVE_FILE {rest_of_command}")
 
     elif "DELAY" in function_type[1]:
-
         command_parts = function_type[1].split(" ")
         delay = int(command_parts[1])
         time.sleep(delay)
