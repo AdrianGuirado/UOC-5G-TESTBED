@@ -24,19 +24,19 @@ def read_ping_output(header):
     client.connect(server_ip, 1883)
     client.subscribe(response_topic)
     time.sleep(0.1) 
-    with open(f"{header}.txt", "w") as file:
+    with open(f"{header}.txt", "w", buffering=1) as file:
         try:
             while ping_process and ping_process.poll() is None:
                 line = ping_process.stdout.readline()
                 if line:
                     file.write(line)
                     print(f"Estoy guardando esto {line}")
+                    file.flush()
                     client.publish(response_topic, f"{header} {line.strip()}")
                 else:
                     print("Adeu")
                     break
         finally:
-            print("Me desconecto")
             client.disconnect()
 
 def ping_function(arguments):
