@@ -33,8 +33,10 @@ def read_ping_output(header):
                     print(f"Estoy guardando esto {line}")
                     client.publish(response_topic, f"{header} {line.strip()}")
                 else:
+                    print("Adeu")
                     break
         finally:
+            print("Me desconecto")
             client.disconnect()
 
 def ping_function(arguments):
